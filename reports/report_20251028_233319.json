@@ -1,0 +1,17 @@
+{
+    "timestamp": "20251028_233319",
+    "file": "temp\\error_code.py",
+    "issues_found": [
+        {
+            "type": "convention",
+            "message": "Missing module docstring"
+        },
+        {
+            "type": "warning",
+            "message": "Unused import detected"
+        }
+    ],
+    "quality_score": 90,
+    "summary": "Code analyzed successfully with minor issues fixed.",
+    "refactor_suggestions": "temp_refactored\\error_code_refactored.py"
+}

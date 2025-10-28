@@ -1,102 +1,64 @@
 import os
 import json
-import logging
-from datetime import datetime
-from agents.parser_agent import ParserAgent
-from agents.bug_finder_agent import BugFinderAgent
-from agents.refactor_agent import RefactorAgent
-from agents.reviewer_agent import ReviewerAgent
-
-# === Setup Logging ===
-os.makedirs("logs", exist_ok=True)
-os.makedirs("reports", exist_ok=True)
-
-log_file = os.path.join("logs", "run_log.txt")
-
-logging.basicConfig(
-    filename=log_file,
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-)
-
-# Also print logs to console
-console = logging.StreamHandler()
-console.setLevel(logging.INFO)
-formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
-console.setFormatter(formatter)
-logging.getLogger("").addHandler(console)
+import datetime
+from core.reviewer_agent import ReviewerAgent  # Make sure this file exists
 
 
 class Orchestrator:
-    """Coordinates multiple agents to perform sequential code analysis and review."""
+    """Coordinates the full code review workflow."""
 
     def __init__(self, code_path):
         self.code_path = code_path
-        self.parser_agent = ParserAgent()
-        self.bug_finder_agent = BugFinderAgent()
-        self.refactor_agent = RefactorAgent()
-        self.reviewer_agent = ReviewerAgent()
+        self.report_dir = "reports"
+        os.makedirs(self.report_dir, exist_ok=True)
 
     def run(self):
-        run_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        logging.info(f"===== Code Review Run Started at {run_time} =====")
+        """Runs the complete AI Code Review process."""
+        # Step 1: Run the reviewer agent
+        agent = ReviewerAgent(self.code_path)
+        review_results = agent.run_review()
 
-        print("🚀 Starting multi-agent code review workflow...\n")
+        # Step 2: Generate refactored code file
+        refactored_path = self._generate_refactored_code(review_results)
 
-        try:
-            # Step 1: Parsing
-            print("🔹 Step 1: Parsing code...")
-            structure = self.parser_agent.run(self.code_path)
-            logging.info("ParserAgent completed successfully.")
+        # Step 3: Save the final report
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        report_path = os.path.join(self.report_dir, f"report_{timestamp}.json")
 
-            # Step 2: Bug analysis
-            print("\n🔹 Step 2: Running bug analysis...")
-            bug_report = self.bug_finder_agent.run(self.code_path)
-            logging.info(f"BugFinderAgent found {len(bug_report)} issues.")
+        report_data = {
+            "timestamp": timestamp,
+            "file": self.code_path,
+            "issues_found": review_results.get("issues_found", []),
+            "quality_score": review_results.get("quality_score", 0),
+            "summary": review_results.get("summary", ""),
+            "refactor_suggestions": refactored_path,
+        }
 
-            # Step 3: Refactor suggestions
-            print("\n🔹 Step 3: Refactoring suggestions...")
-            refactor_suggestions = self.refactor_agent.run(self.code_path)
-            logging.info("RefactorAgent generated suggestions.")
+        with open(report_path, "w", encoding="utf-8") as f:
+            json.dump(report_data, f, indent=4)
 
-            # Step 4: Combine & save report
-            combined_report = {
-                "timestamp": run_time,
-                "file": self.code_path,
-                "structure": structure,
-                "issues": bug_report,
-                "refactor_suggestions": refactor_suggestions,
-            }
+        print(f"✅ Review complete — Report saved at {report_path}")
+        return report_path
 
-            report_path = f"reports/final_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-            with open(report_path, "w", encoding="utf-8") as f:
-                json.dump(combined_report, f, indent=4)
-            logging.info(f"Saved report: {report_path}")
+    def _generate_refactored_code(self, review_results):
+        """Saves the corrected/refactored code to a file."""
+        refactored_dir = "temp_refactored"
+        os.makedirs(refactored_dir, exist_ok=True)
 
-            # Step 5: Final Review
-            print("\n🔹 Step 4: Running final code review...")
-            final_review = self.reviewer_agent.run(report_path)
-            logging.info("ReviewerAgent completed successfully.")
+        refactored_path = os.path.join(
+            refactored_dir,
+            os.path.basename(self.code_path).replace(".py", "_refactored.py")
+        )
 
-            print("\n✅ Final Code Review Summary:")
-            print(json.dumps(final_review, indent=4))
+        # If a corrected version is available
+        if "refactored_code" in review_results and review_results["refactored_code"]:
+            corrected_code = review_results["refactored_code"]
+        else:
+            # Fall back to original code
+            with open(self.code_path, "r", encoding="utf-8") as f:
+                corrected_code = f.read()
 
-            logging.info("===== Code Review Run Completed Successfully =====\n")
+        with open(refactored_path, "w", encoding="utf-8") as f:
+            f.write(corrected_code)
 
-            # ✅ Return data for evaluation
-            return {
-                "file": self.code_path,
-                "issues": bug_report,
-                "refactor_suggestions": refactor_suggestions,
-                "final_review": final_review
-            }
-
-        except Exception as e:
-            logging.error(f"Error occurred: {e}")
-            print(f"❌ An error occurred during execution: {e}")
-            return None
-
-
-if __name__ == "__main__":
-    orchestrator = Orchestrator("test_files/test_code.py")
-    orchestrator.run()
+        return refactored_path

@@ -1,0 +1,47 @@
+{
+    "timestamp": "2025-10-28 23:12:22",
+    "file": "C:\\Users\\SOUNDAR\\AppData\\Local\\Temp\\tmp3i6pw8b2.py",
+    "structure": null,
+    "issues": [
+        {
+            "type": "convention",
+            "module": "tmp3i6pw8b2",
+            "obj": "",
+            "line": 1,
+            "column": 0,
+            "endLine": null,
+            "endColumn": null,
+            "path": "C:\\Users\\SOUNDAR\\AppData\\Local\\Temp\\tmp3i6pw8b2.py",
+            "symbol": "missing-module-docstring",
+            "message": "Missing module docstring",
+            "message-id": "C0114"
+        },
+        {
+            "type": "convention",
+            "module": "tmp3i6pw8b2",
+            "obj": "main",
+            "line": 31,
+            "column": 0,
+            "endLine": 31,
+            "endColumn": 8,
+            "path": "C:\\Users\\SOUNDAR\\AppData\\Local\\Temp\\tmp3i6pw8b2.py",
+            "symbol": "missing-function-docstring",
+            "message": "Missing function or method docstring",
+            "message-id": "C0116"
+        },
+        {
+            "type": "warning",
+            "module": "tmp3i6pw8b2",
+            "obj": "",
+            "line": 1,
+            "column": 0,
+            "endLine": 1,
+            "endColumn": 11,
+            "path": "C:\\Users\\SOUNDAR\\AppData\\Local\\Temp\\tmp3i6pw8b2.py",
+            "symbol": "unused-import",
+            "message": "Unused import math",
+            "message-id": "W0611"
+        }
+    ],
+    "refactor_suggestions": "C:\\Users\\SOUNDAR\\AppData\\Local\\Temp\\tmp3i6pw8b2_refactored.py"
+}
