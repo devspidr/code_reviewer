@@ -1,0 +1,10 @@
+langchain==0.3.25
+openai
+python-dotenv
+streamlit
+requests
+tree_sitter
+pylint
+flake8
+bandit
+gitpython
