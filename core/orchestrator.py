@@ -1,33 +1,40 @@
 # core/orchestrator.py
-from typing import List, Dict
-
-class BaseAgent:
-    """Base class for all agents."""
-    def __init__(self, name: str):
-        self.name = name
-
-    def process(self, data: Dict) -> Dict:
-        """Override in child classes."""
-        raise NotImplementedError(f"{self.name} must implement process() method.")
-
+import json
+from agents.parser_agent import ParserAgent
+from agents.bug_finder_agent import BugFinderAgent
 
 class Orchestrator:
-    """Main controller to coordinate agent interactions."""
-    def __init__(self, agents: List[BaseAgent]):
-        self.agents = agents
+    """Coordinates multiple agents to perform sequential analysis."""
 
-    def run(self, input_data: Dict) -> Dict:
-        """Run all agents sequentially and pass data through the pipeline."""
-        data = input_data
-        print("\n🚀 Starting Orchestration Pipeline...\n")
+    def __init__(self, code_path):
+        self.code_path = code_path
+        self.parser_agent = ParserAgent()
+        self.bug_finder_agent = BugFinderAgent()
 
-        for agent in self.agents:
-            print(f"🤖 Running agent: {agent.name}")
-            try:
-                data = agent.process(data)
-            except Exception as e:
-                print(f"⚠️ Error in {agent.name}: {e}")
-            print(f"✅ Finished: {agent.name}\n")
+    def run(self):
+        print("🚀 Starting multi-agent code review workflow...\n")
 
-        print("🎯 Pipeline complete!")
-        return data
+        # Step 1: Parse the code
+        structure = self.parser_agent.run(self.code_path)
+
+        # Step 2: Run bug analysis
+        bug_report = self.bug_finder_agent.run(self.code_path)
+
+        # Step 3: Combine both results
+        combined_report = {
+            "file": self.code_path,
+            "structure": structure,
+            "issues": bug_report
+        }
+
+        # Step 4: Pretty print result
+        print("\n✅ Final Combined Report:")
+        print(json.dumps(combined_report, indent=4))
+
+        return combined_report
+
+
+if __name__ == "__main__":
+    code_file = "test_files/test_code.py"
+    orchestrator = Orchestrator(code_file)
+    orchestrator.run()
