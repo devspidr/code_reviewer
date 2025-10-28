@@ -1,8 +1,14 @@
-"""
-Code Parser Agent
-- Responsible for parsing source code using tree-sitter or AST
-- This file contains placeholder functions to be implemented later.
-"""
-def parse_code(source_code: str):
-    # TODO: implement tree-sitter parse -> return AST object
-    return {"ast": None, "summary": "Parser placeholder"}
+# agents/parser_agent.py
+from core.orchestrator import BaseAgent
+
+class ParserAgent(BaseAgent):
+    """Analyzes the code structure using syntax parsing."""
+    def __init__(self):
+        super().__init__("ParserAgent")
+
+    def process(self, data):
+        code = data.get("code", "")
+        # For now, just simulate structure understanding
+        print("🧩 Parsing code structure...")
+        data["parsed"] = {"functions": 3, "classes": 1}  # dummy structure
+        return data

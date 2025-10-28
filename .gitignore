@@ -1,8 +1,19 @@
-# .gitignore
-venv/
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Environment
 .env
-.DS_Store
-.idea/
+venv/
+.venv/
+
+# VS Code
 .vscode/
+
+# Streamlit cache
+.streamlit/
+
+# Logs
+*.log
