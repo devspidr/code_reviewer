@@ -1,0 +1,73 @@
+{
+    "timestamp": "2025-10-28 22:57:33",
+    "file": "test_files\\test_code.py",
+    "structure": null,
+    "issues": [
+        {
+            "type": "convention",
+            "module": "test_code",
+            "obj": "",
+            "line": 1,
+            "column": 0,
+            "endLine": null,
+            "endColumn": null,
+            "path": "test_files\\test_code.py",
+            "symbol": "missing-module-docstring",
+            "message": "Missing module docstring",
+            "message-id": "C0114"
+        },
+        {
+            "type": "convention",
+            "module": "test_code",
+            "obj": "Calculator",
+            "line": 3,
+            "column": 0,
+            "endLine": 3,
+            "endColumn": 16,
+            "path": "test_files\\test_code.py",
+            "symbol": "missing-class-docstring",
+            "message": "Missing class docstring",
+            "message-id": "C0115"
+        },
+        {
+            "type": "convention",
+            "module": "test_code",
+            "obj": "Calculator.add",
+            "line": 4,
+            "column": 4,
+            "endLine": 4,
+            "endColumn": 11,
+            "path": "test_files\\test_code.py",
+            "symbol": "missing-function-docstring",
+            "message": "Missing function or method docstring",
+            "message-id": "C0116"
+        },
+        {
+            "type": "convention",
+            "module": "test_code",
+            "obj": "Calculator.subtract",
+            "line": 7,
+            "column": 4,
+            "endLine": 7,
+            "endColumn": 16,
+            "path": "test_files\\test_code.py",
+            "symbol": "missing-function-docstring",
+            "message": "Missing function or method docstring",
+            "message-id": "C0116"
+        },
+        {
+            "type": "warning",
+            "module": "test_code",
+            "obj": "",
+            "line": 1,
+            "column": 0,
+            "endLine": 1,
+            "endColumn": 11,
+            "path": "test_files\\test_code.py",
+            "symbol": "unused-import",
+            "message": "Unused import math",
+            "message-id": "W0611"
+        }
+    ],
+    "refactor_suggestions": "test_files\\test_code_refactored.py"
+}

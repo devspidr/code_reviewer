@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 from datetime import datetime
 from agents.parser_agent import ParserAgent
@@ -8,6 +9,8 @@ from agents.reviewer_agent import ReviewerAgent
 
 # === Setup Logging ===
 os.makedirs("logs", exist_ok=True)
+os.makedirs("reports", exist_ok=True)
+
 log_file = os.path.join("logs", "run_log.txt")
 
 logging.basicConfig(
@@ -16,7 +19,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 
-# Optional: also print logs to console
+# Also print logs to console
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
@@ -80,29 +83,20 @@ class Orchestrator:
 
             logging.info("===== Code Review Run Completed Successfully =====\n")
 
+            # ✅ Return data for evaluation
+            return {
+                "file": self.code_path,
+                "issues": bug_report,
+                "refactor_suggestions": refactor_suggestions,
+                "final_review": final_review
+            }
+
         except Exception as e:
             logging.error(f"Error occurred: {e}")
             print(f"❌ An error occurred during execution: {e}")
+            return None
+
 
 if __name__ == "__main__":
-    logging.info("===== Code Review Run Started =====")
-
-    parser = ParserAgent()
-logging.info("ParserAgent started.")
-structure = parser.run("test_files/test_code.py")
-logging.info("ParserAgent completed successfully.")
-
-bugfinder = BugFinderAgent()
-logging.info("BugFinderAgent started.")
-issues = bugfinder.run("test_files/test_code.py")
-logging.info(f"BugFinderAgent found {len(issues)} issues.")
-
-refactor = RefactorAgent()
-logging.info("RefactorAgent started.")
-suggestions = refactor.run("test_files/test_code.py")
-logging.info("RefactorAgent completed successfully.")
-
-reviewer = ReviewerAgent()
-logging.info("ReviewerAgent started.")
-final_report = reviewer.run("test_files/test_code.py")
-logging.info("ReviewerAgent completed successfully.")
+    orchestrator = Orchestrator("test_files/test_code.py")
+    orchestrator.run()

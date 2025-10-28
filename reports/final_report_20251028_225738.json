@@ -1,0 +1,21 @@
+{
+    "timestamp": "2025-10-28 22:57:36",
+    "file": "test_files\\test_code_refactored.py",
+    "structure": null,
+    "issues": [
+        {
+            "type": "error",
+            "module": "test_code_refactored",
+            "obj": "",
+            "line": 4,
+            "column": 5,
+            "endLine": null,
+            "endColumn": null,
+            "path": "test_files\\test_code_refactored.py",
+            "symbol": "syntax-error",
+            "message": "Parsing failed: 'expected an indented block after function definition on line 3 (test_code_refactored, line 4)'",
+            "message-id": "E0001"
+        }
+    ],
+    "refactor_suggestions": "test_files\\test_code_refactored_refactored.py"
+}

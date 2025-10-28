@@ -1,0 +1,10 @@
+[
+    {
+        "file": "test_code.py",
+        "issues_found": 5
+    },
+    {
+        "file": "test_code_refactored.py",
+        "issues_found": 1
+    }
+]
